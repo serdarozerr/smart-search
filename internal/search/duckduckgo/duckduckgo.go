@@ -3,22 +3,22 @@ package duckduckgo
 import (
 	"fmt"
 	"github.com/sap-nocops/duckduckgogo/client"
-	"search/internal/search"
+	"search/internal/schema"
 )
 
 type DuckDuckGo struct{}
 
-func (ddg DuckDuckGo) Query(query string) (search.ResponseList, error) {
-	duckdg := client.NewDuckDuckGoSearchClient()
-	res, err := duckdg.SearchLimited(query, 10)
+func (ddg DuckDuckGo) Query(query string) (schema.EngineResponseList, error) {
+	ddgClient := client.NewDuckDuckGoSearchClient()
+	res, err := ddgClient.SearchLimited(query, 10)
 	if err != nil {
 		fmt.Printf("error: %v", err)
 		return nil, err
 	}
-	responsesList := make(search.ResponseList, 0, 20)
+	responsesList := make(schema.EngineResponseList, 0, 20)
 
 	for _, result := range res {
-		res := search.Response{Title: result.Title, Url: result.FormattedUrl, Snippet: result.Snippet}
+		res := schema.EngineResponse{Title: result.Title, Url: result.FormattedUrl, Snippet: result.Snippet}
 		responsesList = append(responsesList, res)
 	}
 

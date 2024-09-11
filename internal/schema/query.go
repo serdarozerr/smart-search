@@ -5,20 +5,25 @@ import (
 	"net/http"
 )
 
-type QueryRequest struct {
-	query string
+type Request struct {
+	Query        string `json:"query"`
+	SearchEngine string `json:"search_engine"`
+}
+type Response struct {
+	Query  string `json:"query"`
+	Answer string `json:"answer"`
 }
 
-type QueryResponse struct {
-	query  string
-	answer string
-}
-
-func (q *QueryRequest) Decode(r *http.Request) error {
+func (q *Request) Decode(r *http.Request) error {
 
 	err := json.NewDecoder(r.Body).Decode(q)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (q Response) Encode(result EngineResponseList) ([]byte, error) {
+	res, err := json.Marshal(result)
+	return res, err
 }

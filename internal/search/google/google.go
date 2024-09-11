@@ -5,7 +5,7 @@ import (
 	"google.golang.org/api/customsearch/v1"
 	"google.golang.org/api/option"
 	"os"
-	"search/internal/search"
+	"search/internal/schema"
 )
 
 var (
@@ -15,7 +15,7 @@ var (
 
 type GoogleSearch struct{}
 
-func (g GoogleSearch) Query(query string) (search.ResponseList, error) {
+func (g GoogleSearch) Query(query string) (schema.EngineResponseList, error) {
 
 	ctx := context.TODO()
 
@@ -28,10 +28,10 @@ func (g GoogleSearch) Query(query string) (search.ResponseList, error) {
 		return nil, err
 	}
 
-	responsesList := make(search.ResponseList, 0, 20)
+	responsesList := make(schema.EngineResponseList, 0, 20)
 
 	for _, result := range resp.Items {
-		res := search.Response{Title: result.Title, Url: result.Link, Snippet: result.Snippet}
+		res := schema.EngineResponse{Title: result.Title, Url: result.Link, Snippet: result.Snippet}
 		responsesList = append(responsesList, res)
 	}
 

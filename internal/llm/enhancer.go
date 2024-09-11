@@ -5,7 +5,7 @@ import (
 	"fmt"
 	openai "github.com/sashabaranov/go-openai"
 	"os"
-	"search/internal/search"
+	"search/internal/schema"
 	"strings"
 )
 
@@ -16,7 +16,7 @@ var (
 	userMessageContent   = "You are a helpful assistant. Please analyze the following user query and create answer for it, the main query is : %s.\nIn the web results, you can have small text snippet, title and url for that.\n If you think that any snippet is related to question go to provided link to fetch much more information to use in your final answer.\nFor that question here is the some web results you can use:\n[\n%s\n]"
 )
 
-func (e Enhancer) messageBuilder(query string, results search.ResponseList) []openai.ChatCompletionMessage {
+func (e Enhancer) messageBuilder(query string, results schema.EngineResponseList) []openai.ChatCompletionMessage {
 	systemMessage := openai.ChatCompletionMessage{Role: "system", Content: systemMessageContent}
 
 	webResultsList := make([]string, 0, len(results))
@@ -33,7 +33,7 @@ func (e Enhancer) messageBuilder(query string, results search.ResponseList) []op
 
 }
 
-func (e Enhancer) FinalizeResult(query string, result search.ResponseList) (string, error) {
+func (e Enhancer) FinalizeResult(query string, result schema.EngineResponseList) (string, error) {
 
 	//config := openai.DefaultConfig("authToken")
 	//openai
