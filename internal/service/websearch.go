@@ -1,7 +1,9 @@
 package service
 
 import (
+	"encoding/json"
 	"net/http"
+	"search/internal/llm"
 	"search/internal/schema"
 
 	"search/internal/search"
@@ -29,14 +31,22 @@ func WebSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := schema.Response{}
-	resBinary, err := response.Encode(res)
+	llmEnhancer := llm.Enhancer{}
+	llmAnswer, err := llmEnhancer.FinalizeResult(request.Query, res)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	response := schema.Response{Query: request.Query, Answer: llmAnswer}
+	resByte, err := json.Marshal(response)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
-	_, err = w.Write(resBinary)
+	_, err = w.Write(resByte)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

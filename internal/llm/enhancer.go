@@ -35,8 +35,6 @@ func (e Enhancer) messageBuilder(query string, results schema.EngineResponseList
 
 func (e Enhancer) FinalizeResult(query string, result schema.EngineResponseList) (string, error) {
 
-	//config := openai.DefaultConfig("authToken")
-	//openai
 	client := openai.NewClient(os.Getenv("OPENAI_API_KEY"))
 
 	ctx := context.Background()
@@ -47,8 +45,7 @@ func (e Enhancer) FinalizeResult(query string, result schema.EngineResponseList)
 		return "", err
 	}
 
-	mes := res.Choices[0].Message.Content
-	println(mes)
+	content := res.Choices[0].Message.Content
 
-	return "", nil
+	return content, nil
 }

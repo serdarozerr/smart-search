@@ -22,8 +22,3 @@ func (q *Request) Decode(r *http.Request) error {
 	}
 	return nil
 }
-
-func (q Response) Encode(result EngineResponseList) ([]byte, error) {
-	res, err := json.Marshal(result)
-	return res, err
-}
