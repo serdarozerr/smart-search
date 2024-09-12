@@ -1,4 +1,4 @@
-module search
+module smart-search
 
 go 1.22
 
